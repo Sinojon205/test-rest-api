@@ -1,0 +1,34 @@
+version: '3.1'
+
+services:
+  db:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: tech-e-market
+      PG_DATA: /var/lib/postgresql/data/
+    ports:
+      - 5432:5432
+    volumes: 
+    - db:/var/lib/postgres/data/
+      
+  backend:
+    build:
+      context: .
+    restart: on-failure
+    environment:
+      DATABASE_DSN: ${DATABASE_DSN:-postgres://postgres:postgres@db:5432/tech-e-market?sslmode=disable}
+      LOG_LEVEL: ${LOG_LEVEL}
+      PORT: ${PORT}
+        
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+
+volumes:
+  db:
+
+
