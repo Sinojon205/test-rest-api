@@ -6,10 +6,9 @@ COPY go.mod go.sum ./
 
 RUN go mod download
 
-COPY internal ./internal
+COPY pkg ./pkg
 COPY cmd ./cmd
 COPY config ./config
-COPY ui ./ui
 
 RUN go build -o /app/tech-e-market ./cmd/
 
